@@ -1,4 +1,3 @@
-#!/home/swanchr/ing-venv/bin/python3
 '''
 This is reference Ingenium Custom Script it intended as a demo of the capabilities in a custom script
  and as a template to follow for implementation.
