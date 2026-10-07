@@ -1,0 +1,2 @@
+ing_lib @ git+https://github.com/OpenIngenium/ingenium-lib.git@v0.1.1
+-r reference_step/requirements.txt

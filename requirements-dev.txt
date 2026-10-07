@@ -1,0 +1,8 @@
+-r steps/cosmos/requirements.txt
+-r steps/reference/requirements.txt
+pytest>=7.4.0
+pytest-mock>=3.11.0
+pytest-cov>=4.1.0
+ruff>=0.6.0
+lxml>=5.0.0
+rnc2rng>=2.6.6
