@@ -1,0 +1,4 @@
+[lint]
+# Only pyflakes: these are reference/example steps, so style opinions are out of
+# scope — but genuine errors (undefined names, unused imports) must stay caught.
+select = ["F"]
