@@ -19,13 +19,6 @@ CUSTOM_SCRIPT_XMLS = sorted(
     glob.glob(os.path.join(REPO_ROOT, 'steps', '*', '*', 'custom_script.xml'))
 )
 
-# Deliberately malformed fixtures used by ing_lib's ProjConfigCreateUpdateCS tests.
-# They are schema-valid but semantically invalid (duplicate input/output names,
-# bad template or mouseover references), so they are checked separately.
-INVALID_FIXTURE_XMLS = sorted(
-    glob.glob(os.path.join(REPO_ROOT, 'steps', 'reference', 'reference_step', 'test_*.xml'))
-)
-
 
 @pytest.fixture(scope='module')
 def relaxng():
@@ -50,21 +43,7 @@ def test_custom_script_matches_schema(relaxng, xml_path):
     )
 
 
-@pytest.mark.parametrize('xml_path', INVALID_FIXTURE_XMLS, ids=relative)
-def test_semantic_fixtures_are_still_schema_valid(relaxng, xml_path):
-    """
-    These fixtures exercise semantic checks downstream of the schema; if one
-    ever stops parsing or stops matching the schema, the fixture is no longer
-    testing what it claims to.
-    """
-    document = etree.parse(xml_path)
-    assert relaxng.validate(document), (
-        f'{relative(xml_path)} is no longer schema-valid:\n'
-        + '\n'.join(str(entry) for entry in relaxng.error_log)
-    )
-
-
-@pytest.mark.parametrize('xml_path', CUSTOM_SCRIPT_XMLS + INVALID_FIXTURE_XMLS, ids=relative)
+@pytest.mark.parametrize('xml_path', CUSTOM_SCRIPT_XMLS, ids=relative)
 def test_xml_model_points_at_the_schema(xml_path):
     """Keep the editor-facing <?xml-model?> hint in sync with the real schema path."""
     document = etree.parse(xml_path)

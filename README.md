@@ -17,7 +17,6 @@ Steps live here rather than alongside the libraries they depend on, so that the
     -   `reference/`: Adaptation-independent example steps built on `ing_lib`.
         -   `basic_reference_step/`: Minimal template — reads inputs, populates entry outputs, reports status.
         -   `reference_step/`: Full template — additionally emits files, images, and series data.
-            Also holds the deliberately malformed `test_*.xml` fixtures used to exercise validation.
     -   `cosmos/`: Steps for [OpenC3 COSMOS](https://openc3.com/), built on `ing_lib_cosmos`.
         -   `send_command/`: Send commands via the COSMOS JSON-RPC API.
         -   `run_script/`: Start a COSMOS script and optionally wait for completion.
