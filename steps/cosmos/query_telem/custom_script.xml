@@ -63,7 +63,7 @@
                         <layout row="1" column="1" width="12" height="1" align="LEFT"></layout>
                     </layout_display>
                     <layout_display>
-                        <template template="{verify_on} ({dn_eu}) and check {verification_condition}"></template>
+                        <template template="{verify_wait}: {verify_on} ({dn_eu}) {verification_condition}"></template>
                         <layout row="2" column="1" width="8" height="1" align="LEFT"></layout>
                     </layout_display>
                     <layout_display>
