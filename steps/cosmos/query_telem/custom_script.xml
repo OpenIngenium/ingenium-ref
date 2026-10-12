@@ -55,6 +55,20 @@
                         <layout row="1" column="1" width="8" height="1" align="LEFT"></layout>
                     </layout_display>
                 </section_header>
+                <section_content>
+                    <layout_field field_name="start_time">
+                        <label label_content="Start Time" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="1" width="6" height="1" align="LEFT"></layout>
+                    </layout_field>
+                    <layout_field field_name="lookback">
+                        <label label_content="Lookback" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="6" width="3" height="1" align="LEFT"></layout>
+                    </layout_field>
+                    <layout_field field_name="timeout">
+                        <label label_content="Timeout" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="9" width="3" height="1" align="LEFT"></layout>
+                    </layout_field>
+                </section_content>
             </section>
             <entry_section>
                 <section_header>
