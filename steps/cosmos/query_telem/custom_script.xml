@@ -35,7 +35,6 @@
                 <enum symbolic="OR"></enum>
                 </enumeration>                
             </input_field>
-            <output_field description="Converts the verification condition result to a string (e.g. EQUAL,3,, to 3={actual_value})" name="telem_eval" type="STRING"/>
             <output_field description="This is the value of the telemetry prior to bitmask or on-change evaluation" name="measured_value" type="STRING"/>
             <output_field description="The actual telemetry value (after bitmask, dn/eu, and channel on change evaluation)" name="actual_value" type="STRING"/>
             <output_field description="The timestamp when the telemetry value was retrieved" name="telem_time" type="STRING"/>
@@ -56,20 +55,34 @@
                         <layout row="1" column="1" width="8" height="1" align="LEFT"></layout>
                     </layout_display>
                 </section_header>
+                <section_content>
+                    <layout_field field_name="start_time">
+                        <label label_content="Start Time" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="1" width="6" height="1" align="LEFT"></layout>
+                    </layout_field>
+                    <layout_field field_name="lookback">
+                        <label label_content="Lookback" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="6" width="3" height="1" align="LEFT"></layout>
+                    </layout_field>
+                    <layout_field field_name="timeout">
+                        <label label_content="Timeout" label_loc="TOP" label_align="CENTER"></label>
+                        <layout row="1" column="9" width="3" height="1" align="LEFT"></layout>
+                    </layout_field>
+                </section_content>
             </section>
             <entry_section>
                 <section_header>
                     <layout_display>
-                        <template template="{telem_name[1]}"></template>
-                        <layout row="1" column="1" width="3" height="1" align="LEFT"></layout>
+                        <template template="Telemetry: {telem_name[1]}"></template>
+                        <layout row="1" column="1" width="12" height="1" align="LEFT"></layout>
                     </layout_display>
                     <layout_display>
-                        <template template="{verify_on} ({dn_eu}) and check {telem_eval}"></template>
-                        <layout row="1" column="5" width="4" height="1" align="LEFT"></layout>
+                        <template template="{verify_wait}: {verify_on} ({dn_eu}) {verification_condition}"></template>
+                        <layout row="2" column="1" width="8" height="1" align="LEFT"></layout>
                     </layout_display>
                     <layout_display>
                         <template template="Value: {actual_value}"></template>
-                        <layout row="1" column="10" width="2" height="1" align="LEFT"></layout>
+                        <layout row="2" column="9" width="3" height="1" align="LEFT"></layout>
                     </layout_display>                    
                     <icon icon_type="STATUS">
                         <mouseover_display>

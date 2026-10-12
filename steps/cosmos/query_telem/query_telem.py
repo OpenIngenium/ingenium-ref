@@ -20,7 +20,6 @@ logger = get_logger(__name__)
 from ing_lib.steps import (
     get_input_output_paths, read_input_file, write_output_file,
     verify_wait_telemetry, InputError, get_telem_prior_value,
-    translate_verification_conditions,
 )
 from ing_lib_cosmos.cosmos import (
     CosmosAPIClient, IngeniumCosmosError, cosmos_telemetry_query_func, build_query_dict,
@@ -125,37 +124,6 @@ def build_combined_query(input_dict, entries):
     return query, entry_map
 
 
-def format_verification_condition(verification_conditions, actual_value):
-    """Translate an Ingenium verification condition into a display expression
-    with the actual telemetry value substituted in."""
-    translated = translate_verification_conditions(verification_conditions)
-    condition = translated['verification_condition']
-    values = translated['verification_values']
-
-    operators = {
-        'GREATER_THAN': '>',
-        'GREATER_THAN_OR_EQUAL': '>=',
-        'LESS_THAN': '<',
-        'LESS_THAN_OR_EQUAL': '<=',
-        'EQUAL': '==',
-        'NOT_EQUAL': '!=',
-    }
-    if condition in operators:
-        return f'{actual_value} {operators[condition]} {values[0]}'
-    if condition == 'CONTAINS':
-        return f'{values[0]} contained in {actual_value}'
-    if condition == 'INCLUSIVE_RANGE':
-        return f'{values[0]} <= {actual_value} <= {values[1]}'
-    if condition == 'EXCLUSIVE_RANGE':
-        return f'{values[0]} < {actual_value} < {values[1]}'
-    if condition == 'RECORD':
-        return f'Record {actual_value}'
-    if condition == 'NOT_PRESENT':
-        return 'telemetry is not present'
-
-    raise InputError(f'Unknown Verification Condition: {condition}')
-
-
 def update_channel_variables(output_dict, entries):
     """
     Record each entry's latest actual value in the output's
@@ -193,10 +161,6 @@ def apply_telem_result_to_entry(entry, telem_result):
     entry['entry_outputs']['measured_value'] = telem_details.get(value_type, '')
     entry['entry_outputs']['actual_value'] = telem_result['actual_value']
     entry['entry_outputs']['telem_time'] = telem_details.get('time')
-    entry['entry_outputs']['telem_eval'] = format_verification_condition(
-        entry['entry_inputs']['verification_condition'],
-        telem_result['actual_value']
-    )
 
 
 # Main logic
@@ -228,8 +192,7 @@ def main():
         entry['entry_outputs'] = {
             'measured_value': '',
             'actual_value': '',
-            'telem_time': '',
-            'telem_eval': ''
+            'telem_time': ''
         }
 
     # Write initial output

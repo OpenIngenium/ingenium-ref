@@ -82,46 +82,14 @@ def find_predict(query_arg, telem_name):
     return next(p for p in query_arg if p['telem_uuid'] == telem_name)
 
 
-@pytest.mark.parametrize(
-    'verification_condition, expected',
-    [
-        ('GREATER_THAN,3,,', '199 > 3'),
-        ('GREATER_THAN_OR_EQUAL,3,,', '199 >= 3'),
-        ('LESS_THAN,3,,', '199 < 3'),
-        ('LESS_THAN_OR_EQUAL,3,,', '199 <= 3'),
-        ('EQUAL,3,,', '199 == 3'),
-        ('NOT_EQUAL,3,,', '199 != 3'),
-        ('CONTAINS,READY,,', 'READY contained in 199'),
-        ('INCLUSIVE_RANGE,,3,7', '3 <= 199 <= 7'),
-        ('EXCLUSIVE_RANGE,,3,7', '3 < 199 < 7'),
-        ('RECORD,,,', 'Record 199'),
-        ('NOT_PRESENT,,,', 'telemetry is not present'),
-    ],
-)
-def test_format_verification_condition(verification_condition, expected):
-    assert query_telem.format_verification_condition(verification_condition, 199) == expected
-
-
 def make_entry_with_outputs(**kwargs):
     entry = make_entry(**kwargs)
     entry['entry_outputs'] = {
         'measured_value': '',
         'actual_value': '',
         'telem_time': '',
-        'telem_eval': '',
     }
     return entry
-
-
-def test_apply_telem_result_populates_telem_eval():
-    entry = make_entry_with_outputs(verification_condition='GREATER_THAN,3,,')
-
-    query_telem.apply_telem_result_to_entry(
-        entry,
-        make_predict_result('TESTPKT__GENERIC/CHANNEL_ONE__FIELD_A', actual_value=4),
-    )
-
-    assert entry['entry_outputs']['telem_eval'] == '4 > 3'
 
 
 @pytest.mark.parametrize(
@@ -214,7 +182,6 @@ class TestMain:
         assert entry['verification_status'] == 'PASS'
         assert entry['entry_outputs']['actual_value'] == 'INHIBIT'
         assert entry['entry_outputs']['telem_time'] == '2026-01-01T00:00:00Z'
-        assert entry['entry_outputs']['telem_eval'] == 'INHIBIT == INHIBIT'
         assert output['custom_script_status'] == 'PASS'
 
     def test_fail_case_sets_fail_status(self, mocker, mock_io):
@@ -250,7 +217,7 @@ class TestMain:
         output = last_output_dict(mock_io)
         assert output['entries'][0]['verification_status'] == 'ERROR'
         assert output['entries'][1]['verification_status'] == 'ERROR'
-        assert set(output['entries'][0]['entry_outputs']) == {'measured_value', 'actual_value', 'telem_time', 'telem_eval'}
+        assert set(output['entries'][0]['entry_outputs']) == {'measured_value', 'actual_value', 'telem_time'}
         assert 'bad query' in output['output_summary']
         assert output['custom_script_status'] == 'ERROR'
 
@@ -303,7 +270,7 @@ class TestMain:
         output = last_output_dict(mock_io)
         entry = output['entries'][0]
         assert entry['verification_status'] == 'ERROR'
-        assert set(entry['entry_outputs']) == {'measured_value', 'actual_value', 'telem_time', 'telem_eval'}
+        assert set(entry['entry_outputs']) == {'measured_value', 'actual_value', 'telem_time'}
         assert 'cosmos down' in output['output_summary']
         assert output['custom_script_status'] == 'ERROR'
 
