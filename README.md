@@ -50,7 +50,7 @@ pip install -r steps/cosmos/requirements.txt
 pip install -r steps/reference/requirements.txt
 ```
 
-Both pull `ing_lib` (and, for COSMOS, `ing_lib_cosmos`) straight from GitHub at a pinned tag.
+Both pull `ingenium-lib` (and, for COSMOS, `ingenium-lib-cosmos`) from PyPI; the import names remain `ing_lib` and `ing_lib_cosmos`.
 Python 3.10 or higher is required.
 
 ## Running a step
